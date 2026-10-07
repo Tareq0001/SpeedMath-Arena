@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpeedMath Arena | تحدي الحساب الذهني السريع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">
+          <h1 data-i18n="appTitle">SpeedMath Arena</h1>
+          <p class="subtitle" data-i18n="appSubtitle">تحدي الحساب الذهني السريع لتعزيز سرعة البديهة والتركيز</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="soundToggleBtn" class="action-btn" title="تبديل المؤثرات الصوتية">
+          <span id="soundIcon">🔊</span>
+          <span data-i18n="soundLabel">الصوت</span>
+        </button>
+        <button id="langToggleBtn" class="action-btn">
+          <span>🌐</span>
+          <span id="langText">English</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Board -->
+    <main class="game-wrapper">
+      <!-- Screen 1: Start Screen -->
+      <section id="startScreen" class="game-card screen-active">
+        <div class="welcome-box">
+          <div class="trophy-badge">🏆</div>
+          <h2 data-i18n="startTitle">جاهز لاختبار سرعتك الذهنية؟</h2>
+          <p data-i18n="startDesc">أجب على أكبر عدد ممكن من المعادلات الرياضية خلال 60 ثانية واجمع أعلى النقاط والمضاعفات!</p>
+        </div>
+
+        <div class="difficulty-selector">
+          <label class="diff-title" data-i18n="selectDiff">اختر مستوى الصعوبة:</label>
+          <div class="diff-options">
+            <button class="diff-btn active" data-diff="easy">
+              <span class="diff-name" data-i18n="diffEasy">سهل (مبتدئ)</span>
+              <span class="diff-meta" data-i18n="diffEasyMeta">جمع وطرح (1-20)</span>
+            </button>
+            <button class="diff-btn" data-diff="medium">
+              <span class="diff-name" data-i18n="diffMedium">متوسط (تحدي)</span>
+              <span class="diff-meta" data-i18n="diffMediumMeta">جمع وطرح وضرب (1-50)</span>
+            </button>
+            <button class="diff-btn" data-diff="hard">
+              <span class="diff-name" data-i18n="diffHard">خبير (صعب)</span>
+              <span class="diff-meta" data-i18n="diffHardMeta">العمليات الأربع مع القسمة (1-100)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="high-score-preview">
+          <span data-i18n="bestScoreLabel">أعلى رقم قياسي محفوظ:</span>
+          <strong id="startHighScore">0</strong>
+        </div>
+
+        <button id="startGameBtn" class="btn btn-primary start-btn">
+          <span>🔥</span>
+          <span data-i18n="btnStartGame">بدء التحدي (60 ثانية)</span>
+        </button>
+      </section>
+
+      <!-- Screen 2: Active Gameplay Screen -->
+      <section id="playScreen" class="game-card" style="display: none;">
+        <!-- HUD Bar -->
+        <div class="hud-bar">
+          <div class="hud-item score-hud">
+            <span class="hud-lbl" data-i18n="hudScore">النقاط</span>
+            <span class="hud-val" id="scoreDisplay">0</span>
+          </div>
+
+          <div class="hud-item timer-hud" id="timerBox">
+            <span class="hud-lbl" data-i18n="hudTimer">الوقت المتبقي</span>
+            <span class="hud-val" id="timerDisplay">60</span>
+          </div>
+
+          <div class="hud-item streak-hud">
+            <span class="hud-lbl" data-i18n="hudStreak">المضاعف</span>
+            <span class="hud-val" id="streakDisplay">1.0x 🔥0</span>
+          </div>
+        </div>
+
+        <!-- Timer Progress Bar -->
+        <div class="timer-progress-track">
+          <div class="timer-progress-fill" id="timerProgressFill"></div>
+        </div>
+
+        <!-- Question Stage -->
+        <div class="question-stage">
+          <div class="combo-bubble" id="comboBubble"></div>
+          <div class="equation-text" id="equationText">12 + 8 = ?</div>
+          
+          <div class="answer-box">
+            <input type="number" id="answerInput" placeholder="؟" autofocus autocomplete="off">
+            <button id="submitAnswerBtn" class="btn btn-submit">⏎</button>
+          </div>
+        </div>
+
+        <!-- Touch / Onscreen Keypad -->
+        <div class="onscreen-keypad">
+          <button class="key-btn" data-key="1">1</button>
+          <button class="key-btn" data-key="2">2</button>
+          <button class="key-btn" data-key="3">3</button>
+          <button class="key-btn" data-key="4">4</button>
+          <button class="key-btn" data-key="5">5</button>
+          <button class="key-btn" data-key="6">6</button>
+          <button class="key-btn" data-key="7">7</button>
+          <button class="key-btn" data-key="8">8</button>
+          <button class="key-btn" data-key="9">9</button>
+          <button class="key-btn key-clear" data-key="clear">C</button>
+          <button class="key-btn" data-key="0">0</button>
+          <button class="key-btn key-enter" data-key="enter">✔</button>
+        </div>
+      </section>
+
+      <!-- Screen 3: Results & Summary Screen -->
+      <section id="resultsScreen" class="game-card" style="display: none;">
+        <div class="welcome-box">
+          <div class="trophy-badge" id="resultTrophy">🎉</div>
+          <h2 data-i18n="resTitle">انتهى الوقت! ملخص التحدي</h2>
+          <p id="resSubtitle" data-i18n="resSub">أداء رائع وجهد ذهني مميز!</p>
+        </div>
+
+        <div class="stats-overview">
+          <div class="stat-card">
+            <span class="stat-lbl" data-i18n="resFinalScore">النتيجة النهائية</span>
+            <span class="stat-num" id="resScore">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-lbl" data-i18n="resAccuracy">الدقة</span>
+            <span class="stat-num" id="resAccuracy">0%</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-lbl" data-i18n="resMaxStreak">أعلى سلسلة صحيحة</span>
+            <span class="stat-num" id="resMaxStreak">0🔥</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-lbl" data-i18n="resSpeed">السرعة</span>
+            <span class="stat-num" id="resSpeed">0 Q/min</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="result-actions">
+          <button id="playAgainBtn" class="btn btn-primary">
+            <span>🔄</span>
+            <span data-i18n="btnPlayAgain">العب مرة أخرى</span>
+          </button>
+          <button id="toggleReviewBtn" class="btn btn-secondary">
+            <span>📋</span>
+            <span data-i18n="btnReview">مراجعة الإجابات</span>
+          </button>
+        </div>
+
+        <!-- Answers Review Table -->
+        <div id="reviewContainer" class="review-table-wrapper" style="display: none;">
+          <table class="review-table">
+            <thead>
+              <tr>
+                <th data-i18n="thEq">المعادلة</th>
+                <th data-i18n="thYourAns">إجابتك</th>
+                <th data-i18n="thCorrectAns">الإجابة الصحيحة</th>
+                <th data-i18n="thStatus">الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="reviewTableBody">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>
+        <span>SpeedMath Arena &copy; 2026 | تطوير:</span>
+        <a href="https://github.com/Tareq0001" target="_blank" rel="noopener">أ. طارق ابوعشي (Tareq Aboushi)</a>
+      </p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
